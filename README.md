@@ -2,7 +2,7 @@
 
 La prueba consiste en un proyecto para generar un microservicio teórico en Django (RestFramework) no se requiere que se desarrolle completamente sino que se respondan las preguntas teniendo como contexto los requerimientos y que en las preguntas que se marcan como "Enviar Código" se pueda tener el código generado, solo se requieren los archivos específicos de la prueba (.py) la cual deberá ser desarrollada en el equipo del aspirante. NO SE REQUIEREN INTERFACES DE USUARIO, solo los microservicios. 
 
-## El requerimiento es un registro de asistentes a un evento, que tenga :
+## El requerimiento es un registro de asistentes a un evento, que tenga
 
 - Número de Identificación
 - Nombres
@@ -75,11 +75,19 @@ def ValidateEmail(email):
 
 ## ¿Como implementaría una clase de repositorio que tenga los métodos de agregar, listar (varios registros por rango de fechas o nombres de la persona) y obtener detalles (con el ID, obtiene todos los campos)
 
+...
+
 ## Diseñe y programe el controlador (Vista) para agregar un registro, listar y obtener los detalles de un registro
+
+...
 
 ## ¿Que se requiere para que en el método que obtiene la lista no se entregue el correo electrónico pero si el resto de los datos?
 
+...
+
 ## Cree el código para registrar la URL del servicio
+
+...
 
 ## Como se sincroniza el modelo con la base de datos? (explique detalladamente el proceso de migración)
 
@@ -98,4 +106,8 @@ Esencialmente la sincronizacion entre el modelo y la base datos ocurre mediente 
 
 Un flujo de estas migraciones se puede ver en la siguiente imagen sacada de https://www.webforefront.com/django/setupdjangomodels.html
 
-![imagen](figura.png)
+![imagen](img/figura.png)
+
+# STATUS
+
+![captura](img/captura.png)
