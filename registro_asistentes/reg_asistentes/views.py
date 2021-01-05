@@ -1,12 +1,8 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializer import AsistenteSerializador
-from .serializer import FechaInputSerializador
-from .models import Asistente
+from .class_repository import AsistenteRepository
+
+AsistenteRpObj = AsistenteRepository()
 
 
 """
@@ -24,36 +20,24 @@ def apiOverview(request):
 
 @api_view(['GET'])
 def asisList(request):
-    asist = Asistente.objects.all().order_by('nombres')
-    serializer = AsistenteSerializador(asist, many=True)
-    return Response(serializer.data)
+    AllDataByName = AsistenteRpObj.listByName()
+    return Response(AllDataByName)
 
 @api_view(['GET'])
 def asisDetail(request, pk):
-    asist = Asistente.objects.filter(id=pk)
-    serializer = AsistenteSerializador(asist, many=True)
-    return Response(serializer.data)
+    OneDataByPk = AsistenteRpObj.detailsById(pk)
+    return Response(OneDataByPk)
 
 
 @api_view(['POST'])
 def asisCreate(request):
-    serializer = AsistenteSerializador(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
+    CreateResult = AsistenteRpObj.CreateAsis(request)
+    return Response(CreateResult)
 
 @api_view(['POST'])
 def asisListDate(request):
-    fechas = FechaInputSerializador(data=request.data)
-    print(fechas)
-    if fechas.is_valid():
-        asist = Asistente.objects.filter(
-        date_llegada__gte=fechas.data['fecha_inicio'], 
-        date_llegada__lte=fechas.data['fecha_final'])
-        serializer = AsistenteSerializador(asist, many=True)
-        return Response(serializer.data)
-    else:
-        return Response({'error':'se necesitan fechas'})
+    AllDataByDates = AsistenteRpObj.listBtwDate(request)
+    return Response(AllDataByDates)
 
 
 

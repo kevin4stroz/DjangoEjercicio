@@ -75,9 +75,93 @@ def ValidateEmail(email):
 
 ## ¿Como implementaría una clase de repositorio que tenga los métodos de agregar, listar (varios registros por rango de fechas o nombres de la persona) y obtener detalles (con el ID, obtiene todos los campos)
 
-...
+```python
+from .serializer import AsistenteSerializador
+from .serializer import FechaInputSerializador
+from .models import Asistente
+
+class AsistenteRepository():
+
+    """ Listar todos by nombre """
+    def listByName(self):
+        asist = Asistente.objects.all().order_by('nombres')
+        serializer = AsistenteSerializador(asist, many=True)
+        return serializer.data
+
+    """ Listar rango de fecha """
+    def listBtwDate(self, request):
+        fechas = FechaInputSerializador(data=request.data)
+        print(fechas)
+        if fechas.is_valid():
+            asist = Asistente.objects.filter(
+            date_llegada__gte=fechas.data['fecha_inicio'], 
+            date_llegada__lte=fechas.data['fecha_final'])
+            serializer = AsistenteSerializador(asist, many=True)
+            return serializer.data
+        else:
+            return {'error':'se necesitan fechas'}
+
+    """ Agregar """
+    def CreateAsis(self, request):
+        serializer = AsistenteSerializador(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return serializer.data
+
+
+    """ Obtener Detalles """
+    def detailsById(self, pk):
+        asist = Asistente.objects.filter(id=pk)
+        serializer = AsistenteSerializador(asist, many=True)
+        return serializer.data
+```
 
 ## Diseñe y programe el controlador (Vista) para agregar un registro, listar y obtener los detalles de un registro
+
+Codigo de la vista
+
+```python
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .class_repository import AsistenteRepository
+
+AsistenteRpObj = AsistenteRepository()
+
+
+"""
+API Overview
+"""
+@api_view(['GET'])
+def apiOverview(request):
+    api_urls = {
+        'Listar todos by nombre' : '/asis-list/',
+        'Listar rango de fecha' : '/asis-list-date/',
+        'Agregar' : '/asis-create/',
+        'Obtener Detalles' : '/asis-detail/<int:pk>/',
+    }
+    return Response(api_urls)
+
+@api_view(['GET'])
+def asisList(request):
+    AllDataByName = AsistenteRpObj.listByName()
+    return Response(AllDataByName)
+
+@api_view(['GET'])
+def asisDetail(request, pk):
+    OneDataByPk = AsistenteRpObj.detailsById(pk)
+    return Response(OneDataByPk)
+
+
+@api_view(['POST'])
+def asisCreate(request):
+    CreateResult = AsistenteRpObj.CreateAsis(request)
+    return Response(CreateResult)
+
+@api_view(['POST'])
+def asisListDate(request):
+    AllDataByDates = AsistenteRpObj.listBtwDate(request)
+    return Response(AllDataByDates)
+```
 
 1. Agregar un registro
 
@@ -128,20 +212,46 @@ curl --request GET \
 
 ## ¿Que se requiere para que en el método que obtiene la lista no se entregue el correo electrónico pero si el resto de los datos?
 
-...
+Se elimina el elemento que no se quiere mostrar en las lista de respuesta
+
+```python
+def listByName(self):
+        asist = Asistente.objects.all().order_by('nombres')
+        serializer = AsistenteSerializador(asist, many=True)
+
+        for item in serializer.data:
+            item.pop('correo_electronico')
+
+        return serializer.data
+```
 
 ## Cree el código para registrar la URL del servicio
 
+- crud_project/urls.py
+
 ```python
-@api_view(['GET'])
-def apiOverview(request):
-    api_urls = {
-        'Listar todos by nombre' : '/asis-list/',
-        'Listar rango de fecha' : '/asis-list-date/',
-        'Agregar' : '/asis-create/',
-        'Obtener Detalles' : '/asis-detail/<int:pk>/',
-    }
-    return Response(api_urls)
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include('reg_asistentes.urls'))
+]
+```
+
+- reg_asistentes/urls.py
+
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.apiOverview, name="api-overview"),
+    path('asis-list/', views.asisList, name="asis-list"),
+    path('asis-list-date/', views.asisListDate, name="asis-list-date"),
+    path('asis-detail/<int:pk>/', views.asisDetail, name="asis-Detail"),
+    path('asis-create/', views.asisCreate, name="asis-Create"),
+]
 ```
 
 ## Como se sincroniza el modelo con la base de datos? (explique detalladamente el proceso de migración)
