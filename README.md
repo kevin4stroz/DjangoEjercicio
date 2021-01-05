@@ -169,5 +169,5 @@ Un flujo de estas migraciones se puede ver en la siguiente imagen sacada de http
 ![captura](img/captura.png)
 
 2. INSOMINIA REST
-![insomnia])(img/insomnia.png)
+![insomnia](img/insomnia.png)
 
