@@ -50,3 +50,5 @@ class Asistente(models.Model):
     )
 
     date_llegada = models.DateTimeField(auto_now_add=True)
+
+    objects = models.Manager()

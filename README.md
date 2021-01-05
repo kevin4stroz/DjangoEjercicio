@@ -79,7 +79,52 @@ def ValidateEmail(email):
 
 ## Diseñe y programe el controlador (Vista) para agregar un registro, listar y obtener los detalles de un registro
 
-...
+1. Agregar un registro
+
+### Peticion
+
+```
+curl --request POST \
+  --url http://127.0.0.1:8000/api/asis-create/ \
+  --header 'Content-Type: application/json' \
+  --data '{
+		"identificacion": 1111111111,
+    "nombres": "David",
+    "apellidos": "Quintero",
+    "correo_electronico": "david@mail.com"
+}'
+```
+
+2. Listar registros order by nombre
+
+### Peticion
+```
+curl --request GET \
+  --url http://127.0.0.1:8000/api/asis-list/
+```
+
+3. Listar registros between date_llegada
+
+### Peticion
+
+```
+curl --request POST \
+  --url http://127.0.0.1:8000/api/asis-list-date/ \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"fecha_inicio":"2021-01-05T09:25:23",
+	"fecha_final":"2021-01-05T09:26:22"
+}'
+```
+
+3. Obtener detalles
+
+### Peticion
+
+```
+curl --request GET \
+  --url http://127.0.0.1:8000/api/asis-detail/5/
+```
 
 ## ¿Que se requiere para que en el método que obtiene la lista no se entregue el correo electrónico pero si el resto de los datos?
 
@@ -87,7 +132,17 @@ def ValidateEmail(email):
 
 ## Cree el código para registrar la URL del servicio
 
-...
+```python
+@api_view(['GET'])
+def apiOverview(request):
+    api_urls = {
+        'Listar todos by nombre' : '/asis-list/',
+        'Listar rango de fecha' : '/asis-list-date/',
+        'Agregar' : '/asis-create/',
+        'Obtener Detalles' : '/asis-detail/<int:pk>/',
+    }
+    return Response(api_urls)
+```
 
 ## Como se sincroniza el modelo con la base de datos? (explique detalladamente el proceso de migración)
 

@@ -6,3 +6,7 @@ class AsistenteSerializador(serializers.ModelSerializer):
     class Meta:
         model = Asistente
         fields = '__all__'
+
+class FechaInputSerializador(serializers.Serializer):
+    fecha_inicio = serializers.DateTimeField()
+    fecha_final = serializers.DateTimeField()
