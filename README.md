@@ -81,7 +81,7 @@ def ValidateEmail(email):
 
 1. Agregar un registro
 
-### Peticion
+**Peticion**
 
 ```
 curl --request POST \
@@ -97,7 +97,7 @@ curl --request POST \
 
 2. Listar registros order by nombre
 
-### Peticion
+**Peticion**
 ```
 curl --request GET \
   --url http://127.0.0.1:8000/api/asis-list/
@@ -105,7 +105,7 @@ curl --request GET \
 
 3. Listar registros between date_llegada
 
-### Peticion
+**Peticion**
 
 ```
 curl --request POST \
@@ -119,7 +119,7 @@ curl --request POST \
 
 3. Obtener detalles
 
-### Peticion
+**Peticion**
 
 ```
 curl --request GET \
@@ -165,4 +165,9 @@ Un flujo de estas migraciones se puede ver en la siguiente imagen sacada de http
 
 # STATUS
 
+1. API REST FUNCIONANDO 
 ![captura](img/captura.png)
+
+2. INSOMINIA REST
+![insomnia])(img/insomnia.png)
+
